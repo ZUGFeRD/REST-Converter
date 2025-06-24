@@ -1,0 +1,174 @@
+version: "3.3"
+services:
+  nginx:
+    image: nginx:1.25.3
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - front-tier
+      - elastic-net
+    volumes:
+      - ./nginx/.htpasswd:/etc/nginx/.htpasswd
+      - ./nginx:/etc/nginx/conf.d:ro
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "https://martin.usegroup.de" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+  certbot:
+    image: certbot/certbot
+    networks:
+      - front-tier
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  app:
+    image: dev.usegroup.de:5050/internal/mustangserver:${CI_COMMIT_REF_SLUG}
+    ports:
+      - "8000:8000"
+    networks:
+      - back-tier
+      - front-tier
+    entrypoint: java -jar -D"spring.profiles.active=local" /opt/mustangserver/mustangserver-${MUSTANG_SERVER_VERSION}.war
+    env_file: .env
+  postgresql:
+    build:
+      context: .
+      dockerfile: postgresql/Dockerfile
+    hostname: postgresql
+    container_name: postgresql
+    environment:
+      POSTGRES_PASSWORD: sonar
+      POSTGRES_DB: bitnami_keycloak
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - back-tier
+    env_file: .env
+
+#  elasticsearch:
+#    build:
+#      context: .
+#      dockerfile: elasticsearch/Dockerfile
+#    hostname: elasticsearch
+#    container_name: elasticsearch
+#    environment:
+#      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+#      - "discovery.type=single-node"
+#    ports:
+#      - "9200:9200"
+#    volumes:
+#      - elasticsearch_data:/usr/share/elasticsearch/data
+#    networks:
+#      - elastic-net
+
+#  kibana:
+#    build:
+#      context: .
+#      dockerfile: kibana/Dockerfile
+#    hostname: kibana
+#    container_name: kibana
+#    ports:
+#      - "5601:5601"
+#    volumes:
+#      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+#    networks:
+#      - elastic-net
+#
+#  filebeat:
+#    user: root
+#    build:
+#      context: .
+#      dockerfile: filebeat/Dockerfile
+#    hostname: filebeat
+#    container_name: filebeat
+#    command:
+#      # Log to stderr.
+#      - -e
+#        # Disable config file permissions checks. Allows mounting
+#      # 'config/metricbeat.yml' even if it's not owned by root.
+#      # see: https://www.elastic.co/guide/en/beats/libbeat/current/config-file-permissions.html
+#      - --strict.perms=false
+#      # Mount point of the host’s filesystem. Required to monitor the host
+#      # from within a container.
+#    volumes:
+#      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+#      - /var/lib/docker:/var/lib/docker:ro
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    networks:
+#      - elastic-net
+#    depends_on:
+#      - elasticsearch
+#      - kibana
+
+#  keycloak:
+#    hostname: keycloak
+#    container_name: keycloak
+#    build:
+#      context: .
+#      dockerfile: keycloak/Dockerfile
+#    ports:
+#      - "${KEYCLOAK_HTTP_PORT}:8080"
+#      - "${KEYCLOAK_HTTPS_PORT}:8443"
+#    volumes:
+#      - ./certbot/conf:/opt/bitnami/keycloak/certs:ro
+#    networks:
+#      - back-tier
+#      - front-tier
+#    environment:
+##      KEYCLOAK_LOG_LEVEL: DEBUG
+#      KEYCLOAK_CREATE_ADMIN_USER: true
+#      KEYCLOAK_ADMIN_USER: user
+#      KEYCLOAK_ADMIN_PASSWORD: bitnami
+#      KEYCLOAK_MANAGEMENT_USER: manager
+#      KEYCLOAK_MANAGEMENT_PASSWORD: bitnami1
+#      KEYCLOAK_DATABASE_HOST: postgresql
+#      KEYCLOAK_DATABASE_PORT: 5432
+#      KEYCLOAK_DATABASE_NAME: bitnami_keycloak
+#      KEYCLOAK_DATABASE_USER: postgres
+#      KEYCLOAK_DATABASE_PASSWORD: sonar
+#      KEYCLOAK_DATABASE_SCHEMA: public
+#      KEYCLOAK_ENABLE_HTTPS: true
+#      KEYCLOAK_HTTPS_USE_PEM: true
+#      KEYCLOAK_HTTPS_CERTIFICATE_FILE: /opt/bitnami/keycloak/certs/live/martin.usegroup.de/fullchain.pem
+#      KEYCLOAK_HTTPS_CERTIFICATE_KEY_FILE: /opt/bitnami/keycloak/certs/live/martin.usegroup.de/privkey.pem
+#    depends_on:
+#      - postgresql
+##      - mailhog
+#    env_file: .env
+
+#  mailhog:
+#    container_name: mailhog
+#    build:
+#      context: .
+#      dockerfile: mailhog/Dockerfile
+#    ports:
+#      - "${MAILHOG_SMTP_PORT_EXPOSE}:1025"
+#      - "${MAILHOG_WEB_PORT_EXPOSE}:8025"
+#    networks:
+#      - back-tier
+#      - front-tier
+#    env_file: .env
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
+  elastic-net:
+    driver: bridge
+
+volumes:
+  share_data:
+    driver: local
+  postgresql_data:
+    driver: local
+  elasticsearch_data:
+    driver: local

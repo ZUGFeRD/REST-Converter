@@ -1,0 +1,7 @@
+build
+/log
+data
+.idea
+gsdll64.dll
+derby.log
+target

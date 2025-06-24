@@ -1,0 +1,95 @@
+{
+   "documentCode": "380",
+   "number": "RE-20201121/508",
+   "referenceNumber": "AB321",
+   "ownOrganisationName": "Bei Spiel GmbH",
+   "currency": "EUR",
+   "issueDate": "2020-11-20T23:00:00.000+00:00",
+   "dueDate": "2020-12-11T23:00:00.000+00:00",
+   "deliveryDate": "2020-11-09T23:00:00.000+00:00",
+   "sender": {
+      "name": "Bei Spiel GmbH",
+      "zip": "12345",
+      "street": "Ecke 12",
+      "location": "Stadthausen",
+      "country": "DE",
+      "vatID": "DE136695976",
+      "bankDetails": [
+         {
+            "accountName": null,
+            "iban": "DE88200800000970375700",
+            "bic": "COBADEFFXXX"
+         }
+      ],
+      "vatid": "DE136695976"
+   },
+   "recipient": {
+      "name": "Theodor Est",
+      "zip": "88802",
+      "street": "Bahnstr. 42",
+      "location": "Spielkreis",
+      "country": "DE",
+      "id": "2"
+   },
+   "deliveryAddress": {},
+   "grandTotal": 571.04,
+   "valid": false,
+   "zfitems": [
+      {
+         "price": 160,
+         "quantity": 1,
+         "basisQuantity": 1,
+         "product": {
+            "unit": "HUR",
+            "name": "Design (hours)",
+            "description": "Of a sample invoice",
+            "taxCategoryCode": "S",
+            "vatpercent": 7,
+            "reverseCharge": false,
+            "intraCommunitySupply": false
+         },
+         "value": 160
+      },
+      {
+         "price": 0.79,
+         "quantity": 400,
+         "basisQuantity": 1,
+         "product": {
+            "unit": "H87",
+            "name": "Ballons",
+            "description": "various colors, ~2000ml",
+            "taxCategoryCode": "S",
+            "vatpercent": 19,
+            "reverseCharge": false,
+            "intraCommunitySupply": false
+         },
+         "value": 0.79
+      },
+      {
+         "price": 0.025,
+         "quantity": 800,
+         "basisQuantity": 1,
+         "product": {
+            "unit": "LTR",
+            "name": "Hot air „heiße Luft“ (litres)",
+            "taxCategoryCode": "S",
+            "vatpercent": 19,
+            "reverseCharge": false,
+            "intraCommunitySupply": false
+         },
+         "value": 0.025
+      }
+   ],
+   "ownVATID": "DE136695976",
+   "ownStreet": "Ecke 12",
+   "ownZIP": "12345",
+   "ownLocation": "Stadthausen",
+   "tradeSettlement": [
+      {
+         "accountName": null,
+         "iban": "DE88200800000970375700",
+         "bic": "COBADEFFXXX"
+      }
+   ],
+   "ownCountry": "DE"
+}

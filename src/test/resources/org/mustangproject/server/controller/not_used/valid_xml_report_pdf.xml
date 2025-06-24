@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<validation filename="tovalidate5932251086012074229mustangserver" datetime="2023-10-04 05:38:04">
+    <pdf>
+        <report>
+            <buildInformation>
+                <releaseDetails id="core" version="1.22.2" buildDate="2022-09-14T13:46:00Z"/>
+                <releaseDetails id="validation-model" version="1.22.2" buildDate="2022-09-14T13:47:00Z"/>
+            </buildInformation>
+            <jobs>
+                <job>
+                    <item size="100033">
+                        <name>/tmp/tovalidate5932251086012074229mustangserver</name>
+                    </item>
+                    <validationReport profileName="PDF/A-3U validation profile" statement="PDF file is compliant with Validation Profile requirements." isCompliant="true">
+                        <details passedRules="126" failedRules="0" passedChecks="11263" failedChecks="0"/>
+                    </validationReport>
+                    <duration start="1696397884693" finish="1696397885727">00:00:01.034</duration>
+                </job>
+            </jobs>
+            <batchSummary totalJobs="1" failedToParse="0" encrypted="0" outOfMemory="0" veraExceptions="0">
+                <validationReports compliant="1" nonCompliant="0" failedJobs="0">1</validationReports>
+                <featureReports failedJobs="0">0</featureReports>
+                <repairReports failedJobs="0">0</repairReports>
+                <duration start="1696397884504" finish="1696397885752">00:00:01.248</duration>
+            </batchSummary>
+        </report>
+        <info>
+            <signature>Mustang</signature>
+            <duration unit="ms">1491</duration>
+        </info>
+        <summary status="valid"/>
+    </pdf>
+    <xml>
+        <summary status="valid"/>
+    </xml>
+    <summary status="valid"/>
+</validation>

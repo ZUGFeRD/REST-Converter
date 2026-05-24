@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.mustangproject</groupId>
     <artifactId>REST-converter</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <name>rest-converter</name>
     <description>REST API to convert
         UBL, CII and FatturaPA XMLs into one another</description>

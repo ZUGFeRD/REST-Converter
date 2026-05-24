@@ -11,3 +11,8 @@
 - allow xmlcen as input and output
 - prevent from logging entries every second after endpoint is first invoked
 - temporarily (?) switching from self runnable war to jar 
+
+1.7.1
+=====
+23.05.2026
+- #338 Invoices without namespace prefixes dont work
